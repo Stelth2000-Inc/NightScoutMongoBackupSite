@@ -21,7 +21,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: python
+          languages: typescript
 
       # For Python, autobuild is effectively a no-op, but it's fine to keep
       - name: Autobuild
