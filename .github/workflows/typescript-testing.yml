@@ -8,12 +8,6 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
-  push:
-    branches:
-      - feature/*
-      - bugfix/*
-      - hotfix/*
-      - release/*
 
 jobs:
   unit-tests:
