@@ -25,10 +25,12 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "PLAYWRIGHT_TEST=true bun run dev",
+    command: "PLAYWRIGHT_TEST=true PORT=3000 bun run dev",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false, // Always start a fresh server for tests
+    timeout: 120 * 1000, // Increase timeout to 120 seconds
     env: {
+      PORT: "3000",
       PLAYWRIGHT_TEST: "true",
       NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || "test-secret-for-playwright",
       DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID || "test-client-id",
