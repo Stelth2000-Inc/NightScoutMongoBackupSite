@@ -16,19 +16,77 @@ vi.mock("next-auth/react", () => ({
 // Simple render function without providers since we're mocking them
 const render = (ui: React.ReactElement) => rtlRender(ui);
 
+// Common test constants
+const TEST_TIMEOUT = 2000;
+const DEFAULT_AUTH_SESSION = {
+  data: {
+    user: {
+      name: "Test User",
+      email: "test@example.com",
+      image: "https://example.com/avatar.png",
+    },
+  },
+  status: "authenticated" as const,
+};
+
+// Mock data factories
+const createMockFile = (
+  filename: string,
+  lastModified?: string,
+  size?: number
+) => ({
+  key: `backups/${filename}`,
+  ...(lastModified && { lastModified }),
+  ...(size && { size }),
+});
+
+const createEmptyFilesResponse = () => ({
+  ok: true,
+  json: async () => ({ files: [] }),
+} as Response);
+
+const createFilesResponse = (files: Array<{ key: string; lastModified?: string; size?: number }>) => ({
+  ok: true,
+  json: async () => ({ files }),
+} as Response);
+
+// Common mock files
+const SINGLE_MOCK_FILE = [
+  createMockFile("dexcom_20250101.tar.gz", "2025-01-01T00:00:00Z", 1048576),
+];
+
+const MULTIPLE_MOCK_FILES = [
+  createMockFile("dexcom_20250101.tar.gz", "2025-01-01T00:00:00Z", 1048576),
+  createMockFile("dexcom_20250102.tar.gz", "2025-01-02T00:00:00Z", 2097152),
+];
+
+// Helper functions
+const waitForElement = async (text: string | RegExp, timeout = TEST_TIMEOUT) => {
+  await waitFor(
+    () => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    },
+    { timeout }
+  );
+};
+
+const renderAndWaitForFetch = async () => {
+  render(<DashboardPage />);
+  await waitFor(() => {
+    expect(mockFetch).toHaveBeenCalled();
+  }, { timeout: TEST_TIMEOUT });
+};
+
+const setupUser = () => userEvent.setup();
+
+const waitForFileToAppear = async (filename: string) => {
+  await waitForElement(filename, TEST_TIMEOUT);
+};
+
 describe("DashboardPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseSession.mockReturnValue({
-      data: {
-        user: {
-          name: "Test User",
-          email: "test@example.com",
-          image: "https://example.com/avatar.png",
-        },
-      },
-      status: "authenticated",
-    } as never);
+    mockUseSession.mockReturnValue(DEFAULT_AUTH_SESSION as never);
   });
 
   afterEach(() => {
@@ -36,59 +94,34 @@ describe("DashboardPage", () => {
   });
 
   it("renders the dashboard title", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ files: [] }),
-    } as Response);
+    mockFetch.mockResolvedValueOnce(createEmptyFilesResponse());
 
     render(<DashboardPage />);
 
     expect(screen.getByText("Nightscout Backup Dashboard")).toBeInTheDocument();
     
-    // Wait for any async state updates to complete
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalled();
-    }, { timeout: 2000 });
+    }, { timeout: TEST_TIMEOUT });
   });
 
   it("displays empty state when no backups exist", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ files: [] }),
-    } as Response);
+    mockFetch.mockResolvedValueOnce(createEmptyFilesResponse());
 
     render(<DashboardPage />);
 
-    await waitFor(() => {
-      expect(screen.getByText(/no backups found yet/i)).toBeInTheDocument();
-    }, { timeout: 2000 });
+    await waitForElement(/no backups found yet/i);
   });
 
   it("displays backup files in table", async () => {
-    const mockFiles = [
-      {
-        key: "backups/dexcom_20250101.tar.gz",
-        lastModified: "2025-01-01T00:00:00Z",
-        size: 1048576, // 1MB
-      },
-      {
-        key: "backups/dexcom_20250102.tar.gz",
-        lastModified: "2025-01-02T00:00:00Z",
-        size: 2097152, // 2MB
-      },
-    ];
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ files: mockFiles }),
-    } as Response);
+    mockFetch.mockResolvedValueOnce(createFilesResponse(MULTIPLE_MOCK_FILES));
 
     render(<DashboardPage />);
 
     await waitFor(() => {
       expect(screen.getByText("dexcom_20250101.tar.gz")).toBeInTheDocument();
       expect(screen.getByText("dexcom_20250102.tar.gz")).toBeInTheDocument();
-    }, { timeout: 2000 });
+    }, { timeout: TEST_TIMEOUT });
   });
 
   it("shows error message when fetch fails", async () => {
@@ -96,149 +129,88 @@ describe("DashboardPage", () => {
 
     render(<DashboardPage />);
 
-    await waitFor(() => {
-      expect(screen.getByText(/network error/i)).toBeInTheDocument();
-    }, { timeout: 2000 });
+    await waitForElement(/network error/i);
   });
 
   it("creates backup when button is clicked", async () => {
     mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ files: [] }),
-      } as Response)
+      .mockResolvedValueOnce(createEmptyFilesResponse())
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ message: "Backup triggered." }),
       } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ files: [] }),
-      } as Response);
+      .mockResolvedValueOnce(createEmptyFilesResponse());
 
-    render(<DashboardPage />);
+    await renderAndWaitForFetch();
 
-    await waitFor(() => {
-      expect(screen.getByText(/create backup/i)).toBeInTheDocument();
-    }, { timeout: 2000 });
+    await waitForElement(/create backup/i);
 
     const createButton = screen.getByText(/create backup/i);
-    const user = userEvent.setup();
+    const user = setupUser();
     await user.click(createButton);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith("/api/backups/create", {
         method: "POST",
       });
-    }, { timeout: 2000 });
+    }, { timeout: TEST_TIMEOUT });
   });
 
   it("shows delete confirmation modal when delete button is clicked", async () => {
-    const mockFiles = [
-      {
-        key: "backups/dexcom_20250101.tar.gz",
-        lastModified: "2025-01-01T00:00:00Z",
-        size: 1048576,
-      },
-    ];
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ files: mockFiles }),
-    } as Response);
+    mockFetch.mockResolvedValueOnce(createFilesResponse(SINGLE_MOCK_FILE));
 
     render(<DashboardPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText("dexcom_20250101.tar.gz")).toBeInTheDocument();
-    }, { timeout: 2000 });
+    await waitForFileToAppear("dexcom_20250101.tar.gz");
 
     const deleteButton = screen.getByText("Delete");
-    const user = userEvent.setup();
+    const user = setupUser();
     await user.click(deleteButton);
 
     await waitFor(() => {
       expect(screen.getByText("Confirm Delete")).toBeInTheDocument();
       expect(screen.getByText(/are you sure you want to delete/i)).toBeInTheDocument();
-    }, { timeout: 2000 });
+    }, { timeout: TEST_TIMEOUT });
   });
 
   it("cancels delete when cancel button is clicked", async () => {
-    const mockFiles = [
-      {
-        key: "backups/dexcom_20250101.tar.gz",
-        lastModified: "2025-01-01T00:00:00Z",
-        size: 1048576,
-      },
-    ];
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ files: mockFiles }),
-    } as Response);
+    mockFetch.mockResolvedValueOnce(createFilesResponse(SINGLE_MOCK_FILE));
 
     render(<DashboardPage />);
+    await waitForFileToAppear("dexcom_20250101.tar.gz");
 
-    await waitFor(() => {
-      expect(screen.getByText("dexcom_20250101.tar.gz")).toBeInTheDocument();
-    }, { timeout: 2000 });
-
-    const user = userEvent.setup();
+    const user = setupUser();
     const deleteButton = screen.getByText("Delete");
     await user.click(deleteButton);
 
-    await waitFor(() => {
-      expect(screen.getByText("Confirm Delete")).toBeInTheDocument();
-    }, { timeout: 2000 });
+    await waitForElement("Confirm Delete");
 
     const cancelButton = screen.getByText("Cancel");
     await user.click(cancelButton);
 
     await waitFor(() => {
       expect(screen.queryByText("Confirm Delete")).not.toBeInTheDocument();
-    }, { timeout: 2000 });
+    }, { timeout: TEST_TIMEOUT });
   });
 
   it("deletes backup when confirmed", async () => {
-    const mockFiles = [
-      {
-        key: "backups/dexcom_20250101.tar.gz",
-        lastModified: "2025-01-01T00:00:00Z",
-        size: 1048576,
-      },
-    ];
-
     mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ files: mockFiles }),
-      } as Response)
+      .mockResolvedValueOnce(createFilesResponse(SINGLE_MOCK_FILE))
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ message: "Backup deleted successfully." }),
       } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ files: [] }),
-      } as Response);
+      .mockResolvedValueOnce(createEmptyFilesResponse());
 
     render(<DashboardPage />);
+    await waitForFileToAppear("dexcom_20250101.tar.gz");
 
-    await waitFor(() => {
-      expect(screen.getByText("dexcom_20250101.tar.gz")).toBeInTheDocument();
-    }, { timeout: 2000 });
-
-    const user = userEvent.setup();
-    // Get the delete button from the table row (not the modal)
+    const user = setupUser();
     const deleteButtons = screen.getAllByText("Delete");
-    const tableDeleteButton = deleteButtons[0]; // First one is in the table
+    const tableDeleteButton = deleteButtons[0];
     await user.click(tableDeleteButton);
 
-    await waitFor(() => {
-      expect(screen.getByText("Confirm Delete")).toBeInTheDocument();
-    }, { timeout: 2000 });
+    await waitForElement("Confirm Delete");
 
-    // Get the confirm delete button from the modal
     const confirmDeleteButtons = screen.getAllByText("Delete");
     const modalDeleteButton = confirmDeleteButtons.find(
       (btn) => btn.closest('[class*="rounded-lg"]') !== null
@@ -250,66 +222,41 @@ describe("DashboardPage", () => {
         expect.stringContaining("/api/backups/delete?key="),
         { method: "DELETE" }
       );
-    }, { timeout: 2000 });
+    }, { timeout: TEST_TIMEOUT });
   });
 
   it("handles files with missing lastModified and size", async () => {
-    const mockFiles = [
-      {
-        key: "backups/dexcom_20250101.tar.gz",
-        // Missing lastModified and size
-      },
-    ];
+    const mockFiles = [createMockFile("dexcom_20250101.tar.gz")];
 
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ files: mockFiles }),
-    } as Response);
+    mockFetch.mockResolvedValueOnce(createFilesResponse(mockFiles));
 
     render(<DashboardPage />);
+    await waitForFileToAppear("dexcom_20250101.tar.gz");
 
-    await waitFor(() => {
-      expect(screen.getByText("dexcom_20250101.tar.gz")).toBeInTheDocument();
-    }, { timeout: 2000 });
-
-    // Should show "—" for missing values
     const cells = screen.getAllByText("—");
     expect(cells.length).toBeGreaterThan(0);
   });
 
   it("refreshes backups when refresh button is clicked", async () => {
     mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ files: [] }),
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ files: [] }),
-      } as Response);
+      .mockResolvedValueOnce(createEmptyFilesResponse())
+      .mockResolvedValueOnce(createEmptyFilesResponse());
 
     render(<DashboardPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText(/refresh/i)).toBeInTheDocument();
-    }, { timeout: 2000 });
+    await waitForElement(/refresh/i);
 
     const refreshButton = screen.getByText(/refresh/i);
-    const user = userEvent.setup();
+    const user = setupUser();
     await user.click(refreshButton);
 
     await waitFor(() => {
-      // Should have been called twice: initial load + refresh
       expect(mockFetch).toHaveBeenCalledTimes(2);
-    }, { timeout: 2000 });
+    }, { timeout: TEST_TIMEOUT });
   });
 
   it("handles backup creation with message and stats", async () => {
     mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ files: [] }),
-      } as Response)
+      .mockResolvedValueOnce(createEmptyFilesResponse())
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({
@@ -318,27 +265,20 @@ describe("DashboardPage", () => {
           stats: { collections: 5 },
         }),
       } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ files: [] }),
-      } as Response);
+      .mockResolvedValueOnce(createEmptyFilesResponse());
 
-    render(<DashboardPage />);
+    await renderAndWaitForFetch();
 
-    await waitFor(() => {
-      expect(screen.getByText(/create backup/i)).toBeInTheDocument();
-    }, { timeout: 2000 });
+    await waitForElement(/create backup/i);
 
     const createButton = screen.getByText(/create backup/i);
-    const user = userEvent.setup();
+    const user = setupUser();
     await user.click(createButton);
 
-    // Verify the backup API was called and then the list was refreshed
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith("/api/backups/create", {
         method: "POST",
       });
-      // Should have called list API twice: initial load + after backup
       expect(mockFetch).toHaveBeenCalledWith("/api/backups/list");
     }, { timeout: 3000 });
   });
