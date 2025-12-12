@@ -25,8 +25,7 @@ module.exports = {
   apps: [
     {
       name: 'nightscout-backup-site',
-      script: 'bunx',
-      args: ['next', 'start'],
+      script: path.resolve(__dirname, 'start.js'),
       cwd: path.resolve(__dirname),
       exec_mode: 'fork',
       instances: 1,
