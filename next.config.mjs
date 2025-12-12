@@ -1,9 +1,19 @@
 // Injected content via Sentry wizard below
 import { withSentryConfig } from "@sentry/nextjs";
 
+// Read version from package.json for build-time injection
+import { readFileSync } from 'fs';
+const packageJson = JSON.parse(readFileSync('./package.json', 'utf8'));
+const appVersion = packageJson.version || 'unknown';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Inject version as environment variable at build time
+  env: {
+    NEXT_PUBLIC_VERSION: appVersion,
+    VERSION: appVersion,
+  },
   // Suppress webpack cache warnings
   webpack: (config, { dev }) => {
     if (dev) {
