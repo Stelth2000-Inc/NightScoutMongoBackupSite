@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/dustin-lennon/NightScoutMongoBackupSite/compare/v1.1.0...v1.2.0) (2025-12-12)
+
+
+### Bug Fixes
+
+* explicitly specify node interpreter for PM2 ([4d3fde2](https://github.com/dustin-lennon/NightScoutMongoBackupSite/commit/4d3fde2576596f2852c5ac0b8dd45813c9faba95))
+
+
+### Features
+
+* use start.js script to launch application with version display ([864df0b](https://github.com/dustin-lennon/NightScoutMongoBackupSite/commit/864df0ba0bf344138215f7bd33a1a1c71227707f))
+
 # [1.1.0](https://github.com/dustin-lennon/NightScoutMongoBackupSite/compare/v1.0.1...v1.1.0) (2025-12-12)
 
 
