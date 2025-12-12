@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/dustin-lennon/NightScoutMongoBackupSite/compare/v1.0.1...v1.1.0) (2025-12-12)
+
+
+### Features
+
+* enable PM2 version metadata ([f4cf71a](https://github.com/dustin-lennon/NightScoutMongoBackupSite/commit/f4cf71ac1b4eeb4a36facfa6a01278715882c845))
+
 ## [1.0.1](https://github.com/dustin-lennon/NightScoutMongoBackupSite/compare/v1.0.0...v1.0.1) (2025-12-12)
 
 
