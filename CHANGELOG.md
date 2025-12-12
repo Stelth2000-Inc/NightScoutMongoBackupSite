@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/dustin-lennon/NightScoutMongoBackupSite/compare/v1.2.0...v1.3.0) (2025-12-12)
+
+
+### Bug Fixes
+
+* skip additional PM2 status component tests with timing issues ([96752a5](https://github.com/dustin-lennon/NightScoutMongoBackupSite/commit/96752a5093e2d7bc69949143097799bda6573dfd))
+* update tests for PM2 status feature ([e75b49a](https://github.com/dustin-lennon/NightScoutMongoBackupSite/commit/e75b49a74b1c840b493f3619b8acad6039d4b19d))
+
+
+### Features
+
+* add PM2 status display for Discord bot ([b7907cb](https://github.com/dustin-lennon/NightScoutMongoBackupSite/commit/b7907cb0fe2e9c57d8717a1e13cf64e8f0487a80))
+
 # [1.2.0](https://github.com/dustin-lennon/NightScoutMongoBackupSite/compare/v1.1.0...v1.2.0) (2025-12-12)
 
 
