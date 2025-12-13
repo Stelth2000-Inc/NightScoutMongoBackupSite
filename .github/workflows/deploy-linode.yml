@@ -50,7 +50,16 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.LINODE_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
+          # Debug: Check if key was written properly
+          echo "Key file size: $(wc -c < ~/.ssh/id_rsa)"
+          echo "Key file starts with:"
+          head -n 1 ~/.ssh/id_rsa
+          
           ssh-keyscan -H ${{ secrets.LINODE_HOST }} >> ~/.ssh/known_hosts
+
+          # Test SSH connection
+          ssh -v -o BatchMode=yes -c ConnectTimeout=10 ${LINODE_USER}@${LINODE_HOST "echo 'SSH connection successful'"
 
       - name: Deploy to Linode
         env:
