@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/compare/v1.3.1...v1.4.0) (2025-12-13)
+
+
+### Bug Fixes
+
+* add error handling for missing project in automation workflows ([367ad7c](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/367ad7c4a7a7f058164d343cac09bacb5627fe92))
+* move PR template to correct location per GitHub convention ([6f5b1bc](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/6f5b1bce075b6f6e29cd8165cdc61c8311a9ab14))
+* remove invalid GitHub Actions expression syntax for PROJECT_NUMBER default ([9d8c508](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/9d8c5085c9603acc6cf069e933341cc308a59bcb))
+
+
+### Features
+
+* add SonarQube issues sync workflow ([9910d54](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/9910d54e9530e9441e4ed952d369089b6b05e6c6))
+* sync project-automation workflow with NightScoutMongoBackup ([9f7c2da](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/9f7c2da8773950249311f7d11d91050fe4ef5524))
+
 ## [1.3.1](https://github.com/dustin-lennon/NightScoutMongoBackupSite/compare/v1.3.0...v1.3.1) (2025-12-12)
 
 
