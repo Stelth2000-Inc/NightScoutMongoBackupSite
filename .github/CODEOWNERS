@@ -1,0 +1,37 @@
+# Global code ownership - all files require review from dustin-lennon
+* @dustin-lennon
+
+# Specific ownership for critical configuration files
+/.github/ @dustin-lennon
+/package.json @dustin-lennon
+/tsconfig.json @dustin-lennon
+/.eslintrc.json @dustin-lennon
+/.releaserc.json @dustin-lennon
+/next.config.mjs @dustin-lennon
+/tailwind.config.ts @dustin-lennon
+/postcss.config.mjs @dustin-lennon
+/playwright.config.ts @dustin-lennon
+/vitest.config.mts @dustin-lennon
+/commitlint.config.js @dustin-lennon
+/ecosystem.dev.config.js @dustin-lennon
+/ecosystem.prod.config.js @dustin-lennon
+
+# Next.js application code
+/app/ @dustin-lennon
+/components/ @dustin-lennon
+/proxy.ts @dustin-lennon
+/instrumentation.ts @dustin-lennon
+/instrumentation-client.ts @dustin-lennon
+/start.js @dustin-lennon
+
+# Tests
+/tests/ @dustin-lennon
+
+# Documentation
+/NGINX_DEPLOYMENT.md @dustin-lennon
+/CHANGELOG.md @dustin-lennon
+/README.md @dustin-lennon
+
+# Deployment and infrastructure
+/nginx-combined.conf @dustin-lennon
+/.env.ci @dustin-lennon
