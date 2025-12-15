@@ -2,6 +2,9 @@ name: SonarCloud
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
   push:
     branches:
       - develop
@@ -24,19 +27,24 @@ jobs:
         with:
           fetch-depth: 0 # Full history for accurate analysis
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: npm ci
 
       - name: Run tests and generate coverage
         run: bun run test:coverage
 
       - name: Run SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v5
+        uses: sonarsource/sonarqube-scan-action@v5.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io

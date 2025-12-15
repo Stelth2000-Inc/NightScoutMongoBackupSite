@@ -24,7 +24,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
-      include: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
+      include: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "proxy.ts"],
       exclude: [
         "node_modules/",
         "tests/",
@@ -34,12 +34,12 @@ export default defineConfig({
         ".sst/",
         "playwright/",
         "instrumentation*.ts",
-        "proxy.ts",
         "**/layout.tsx",
         "**/providers.tsx",
         "**/themes/**",
         "**/emscripten/**",
       ],
+      all: true, // Include all files, not just those imported
     },
   },
   resolve: {
