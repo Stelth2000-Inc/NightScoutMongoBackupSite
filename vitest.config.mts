@@ -39,6 +39,7 @@ export default defineConfig({
         "**/themes/**",
         "**/emscripten/**",
       ],
+      all: true, // Include all files, not just those imported
     },
   },
   resolve: {
