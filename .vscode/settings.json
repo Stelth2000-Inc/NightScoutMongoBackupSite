@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "stelth2000-inc",
+        "projectKey": "Stelth2000-Inc_NightScoutMongoBackupSite"
+    }
+}
