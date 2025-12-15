@@ -35,28 +35,28 @@ describe("GET /api/pm2/status", () => {
 
   describe("Method handlers", () => {
     it("POST returns 405 Method Not Allowed", async () => {
-      const response = await POST();
+      const response = POST();
       const data = await response.json();
       expect(response.status).toBe(405);
       expect(data.error).toContain("Use GET");
     });
 
     it("PUT returns 405 Method Not Allowed", async () => {
-      const response = await PUT();
+      const response = PUT();
       const data = await response.json();
       expect(response.status).toBe(405);
       expect(data.error).toContain("Use GET");
     });
 
     it("PATCH returns 405 Method Not Allowed", async () => {
-      const response = await PATCH();
+      const response = PATCH();
       const data = await response.json();
       expect(response.status).toBe(405);
       expect(data.error).toContain("Use GET");
     });
 
     it("DELETE returns 405 Method Not Allowed", async () => {
-      const response = await DELETE();
+      const response = DELETE();
       const data = await response.json();
       expect(response.status).toBe(405);
       expect(data.error).toContain("Use GET");
@@ -121,7 +121,7 @@ describe("GET /api/pm2/status", () => {
             name: "nightscout-backup-site",
             pm_id: 1,
             pm2_env: { status: "online", pm_uptime: Date.now() - 3600000 },
-            monit: { memory: 268435456, cpu: 1.0 },
+            monit: { memory: 268435456, cpu: 1 },
           },
         ]);
       });
@@ -407,7 +407,7 @@ describe("GET /api/pm2/status", () => {
               status: "online",
               pm_uptime: Date.now() - 3600000,
             },
-            monit: { memory: 268435456, cpu: 1.0 },
+            monit: { memory: 268435456, cpu: 1 },
           },
         ]);
       });
@@ -463,7 +463,7 @@ describe("GET /api/pm2/status", () => {
 
     it("handles non-Error objects in catch block", async () => {
       mockPM2Connect.mockImplementation(() => {
-        throw "String error";
+        throw new Error("String error");
       });
 
       const response = await GET();
@@ -520,7 +520,7 @@ describe("GET /api/pm2/status", () => {
               pm_uptime: Date.now() - 7200000,
               restart_time: 1,
             },
-            monit: { memory: 268435456, cpu: 1.0 },
+            monit: { memory: 268435456, cpu: 1 },
           },
         ]);
       });
