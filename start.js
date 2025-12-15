@@ -16,3 +16,4 @@ const child = spawn('bunx', ['next', 'start'], {
 child.on('exit', (code) => {
   process.exit(code);
 });
+
