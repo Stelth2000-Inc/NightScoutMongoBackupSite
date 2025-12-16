@@ -27,6 +27,7 @@ jobs:
         uses: actions/github-script@v8
         continue-on-error: true
         with:
+          github-token: ${{ secrets.ORG_PROJECT_TOKEN }}
           script: |
             const query = `
               query($owner: String!, $first: Int!) {
