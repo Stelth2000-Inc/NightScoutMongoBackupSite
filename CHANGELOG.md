@@ -1,3 +1,15 @@
+# [2.1.0](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/compare/v2.0.7...v2.1.0) (2025-12-25)
+
+
+### Bug Fixes
+
+* update e2e test to use specific heading selector ([cde3984](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/cde3984b90fca52bea3b5dbc1139eca7aebc6eaf))
+
+
+### Features
+
+* add footer component with copyright and version ([38c5f28](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/38c5f2802aef6df0c14dd572cd30ad1b1c1ffdda))
+
 ## [2.0.7](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/compare/v2.0.6...v2.0.7) (2025-12-25)
 
 
