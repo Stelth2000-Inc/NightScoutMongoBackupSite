@@ -58,7 +58,7 @@ test.describe("Dashboard", () => {
 
   test("displays dashboard when authenticated", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText("Nightscout Backup Dashboard")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Nightscout Backup Dashboard" })).toBeVisible();
   });
 
   test("displays backup files table", async ({ page }) => {
