@@ -119,7 +119,7 @@ export default function BackupManager() {
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             Nightscout Backup Dashboard
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
             Internal admin panel for managing compressed MongoDB backups in
             S3.
           </p>
@@ -129,7 +129,7 @@ export default function BackupManager() {
             <button
               onClick={() => void refreshBackups(true)}
               disabled={loadingList || creatingBackup}
-              className="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-slate-50 shadow-sm ring-1 ring-slate-700 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-md bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 shadow-sm ring-1 ring-slate-300 hover:bg-slate-300 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-slate-800 dark:text-slate-50 dark:ring-slate-700 dark:hover:bg-slate-700"
             >
               {loadingList ? "Loading..." : "Refresh"}
             </button>
@@ -147,12 +147,12 @@ export default function BackupManager() {
       {(error || statusMessage) && (
         <div className="space-y-2">
           {error && (
-            <div className="rounded-md border border-red-500/40 bg-red-950/40 px-4 py-2 text-sm text-red-200">
+            <div className="rounded-md border border-red-500/40 bg-red-50 px-4 py-2 text-sm text-red-800 dark:bg-red-950/40 dark:text-red-200">
               {error}
             </div>
           )}
           {statusMessage && !error && (
-            <div className="rounded-md border border-emerald-500/40 bg-emerald-950/40 px-4 py-2 text-sm text-emerald-200">
+            <div className="rounded-md border border-emerald-500/40 bg-emerald-50 px-4 py-2 text-sm text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200">
               {statusMessage}
             </div>
           )}
@@ -161,13 +161,13 @@ export default function BackupManager() {
 
       {confirmDeleteKey && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="w-full max-w-md rounded-lg border border-slate-800 bg-slate-950 p-6 shadow-xl">
-            <h3 className="mb-2 text-lg font-semibold text-slate-100">
+          <div className="w-full max-w-md rounded-lg border border-slate-300 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-950">
+            <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">
               Confirm Delete
             </h3>
-            <p className="mb-4 text-sm text-slate-300">
+            <p className="mb-4 text-sm text-slate-700 dark:text-slate-300">
               Are you sure you want to delete{" "}
-              <span className="font-mono text-slate-200">
+              <span className="font-mono text-slate-800 dark:text-slate-200">
                 {filesWithDisplayNames.find((f) => f.key === confirmDeleteKey)
                   ?.displayName ?? confirmDeleteKey}
               </span>
@@ -177,7 +177,7 @@ export default function BackupManager() {
               <button
                 onClick={() => setConfirmDeleteKey(null)}
                 disabled={deletingKey !== null}
-                className="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-md bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 ring-1 ring-slate-300 hover:bg-slate-300 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700"
               >
                 Cancel
               </button>
@@ -188,7 +188,7 @@ export default function BackupManager() {
                   }
                 }}
                 disabled={deletingKey !== null}
-                className="rounded-md bg-red-950/60 px-4 py-2 text-sm font-medium text-red-300 ring-1 ring-red-800/60 hover:bg-red-900/60 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-md bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-red-300 hover:bg-red-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-950/60 dark:text-red-300 dark:ring-red-800/60 dark:hover:bg-red-900/60"
               >
                 {deletingKey === confirmDeleteKey ? "Deleting..." : "Delete"}
               </button>
@@ -197,30 +197,30 @@ export default function BackupManager() {
         </div>
       )}
 
-      <section className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 sm:p-6">
+      <section className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 sm:p-6 dark:border-slate-800 dark:bg-slate-950/40">
         <div className="mb-4 flex items-center justify-between gap-2">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-600 dark:text-slate-400">
             S3 Backup Files
           </h2>
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-slate-500 dark:text-slate-500">
             Showing {files.length} file{files.length === 1 ? "" : "s"}
           </span>
         </div>
 
-        <div className="overflow-hidden rounded-lg border border-slate-800/80 bg-slate-950/60">
+        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-800/80 dark:bg-slate-950/60">
           <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-slate-800 bg-slate-900/60">
+            <thead className="border-b border-slate-200 bg-slate-100/80 dark:border-slate-800 dark:bg-slate-900/60">
               <tr>
-                <th className="px-4 py-2 font-medium text-slate-300">
+                <th className="px-4 py-2 font-medium text-slate-700 dark:text-slate-300">
                   File Name
                 </th>
-                <th className="px-4 py-2 font-medium text-slate-300">
+                <th className="px-4 py-2 font-medium text-slate-700 dark:text-slate-300">
                   Last modified
                 </th>
-                <th className="px-4 py-2 font-medium text-slate-300">
+                <th className="px-4 py-2 font-medium text-slate-700 dark:text-slate-300">
                   Size
                 </th>
-                <th className="px-4 py-2 font-medium text-slate-300">
+                <th className="px-4 py-2 font-medium text-slate-700 dark:text-slate-300">
                   Actions
                 </th>
               </tr>
@@ -239,24 +239,24 @@ export default function BackupManager() {
               {filesWithDisplayNames.map((file) => (
                 <tr
                   key={file.key}
-                  className="border-t border-slate-800/60 hover:bg-slate-900/40"
+                  className="border-t border-slate-200 hover:bg-slate-50 dark:border-slate-800/60 dark:hover:bg-slate-900/40"
                 >
-                  <td className="max-w-xs truncate px-4 py-2 text-slate-100">
+                  <td className="max-w-xs truncate px-4 py-2 text-slate-900 dark:text-slate-100">
                     <a
                       href={`/api/backups/download?key=${encodeURIComponent(
                         file.key
                       )}`}
-                      className="text-emerald-400 hover:text-emerald-300 hover:underline"
+                      className="text-emerald-600 hover:text-emerald-700 hover:underline dark:text-emerald-400 dark:hover:text-emerald-300"
                     >
                       {file.displayName}
                     </a>
                   </td>
-                  <td className="px-4 py-2 text-slate-300">
+                  <td className="px-4 py-2 text-slate-700 dark:text-slate-300">
                     {file.lastModified
                       ? new Date(file.lastModified).toLocaleString()
                       : "—"}
                   </td>
-                  <td className="px-4 py-2 text-slate-300">
+                  <td className="px-4 py-2 text-slate-700 dark:text-slate-300">
                     {file.size != null
                       ? `${(file.size / (1024 * 1024)).toFixed(2)} MB`
                       : "—"}
@@ -265,7 +265,7 @@ export default function BackupManager() {
                     <button
                       onClick={() => setConfirmDeleteKey(file.key)}
                       disabled={deletingKey !== null || loadingList || creatingBackup}
-                      className="rounded-md bg-red-950/40 px-3 py-1.5 text-xs font-medium text-red-300 ring-1 ring-red-800/60 hover:bg-red-900/40 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded-md bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700 ring-1 ring-red-300 hover:bg-red-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-950/40 dark:text-red-300 dark:ring-red-800/60 dark:hover:bg-red-900/40"
                     >
                       {deletingKey === file.key ? "Deleting..." : "Delete"}
                     </button>

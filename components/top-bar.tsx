@@ -45,7 +45,7 @@ export function TopBar() {
                     alt={user.name ?? "Discord avatar"}
                     width={28}
                     height={28}
-                    className="h-7 w-7 rounded-full border border-slate-700 object-cover"
+                    className="h-7 w-7 rounded-full border border-slate-300 object-cover dark:border-slate-700"
                     unoptimized
                   />
                 )}
@@ -54,7 +54,7 @@ export function TopBar() {
                 </span>
               </button>
               {menuOpen && (
-                <div className="absolute right-0 z-20 mt-2 w-56 rounded-md border border-slate-800 bg-slate-950/95 p-3 text-xs text-slate-200 shadow-xl">
+                <div className="absolute right-0 z-20 mt-2 w-56 rounded-md border border-slate-200 bg-white p-3 text-xs text-slate-900 shadow-xl dark:border-slate-800 dark:bg-slate-950/95 dark:text-slate-200">
                   <p className="mb-1 text-[11px] uppercase tracking-[0.18em] text-slate-500">
                     Signed in
                   </p>

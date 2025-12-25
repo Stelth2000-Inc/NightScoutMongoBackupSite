@@ -34,7 +34,7 @@ describe("ThemeToggle", () => {
     render(<ThemeToggle />);
 
     const darkButton = screen.getByRole("button", { name: "Dark" });
-    expect(darkButton).toHaveClass("bg-slate-100");
+    expect(darkButton).toHaveClass("dark:bg-slate-100");
   });
 
   it("calls setTheme when clicking a theme button", async () => {
