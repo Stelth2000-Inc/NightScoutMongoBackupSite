@@ -1,3 +1,10 @@
+## [2.0.6](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/compare/v2.0.5...v2.0.6) (2025-12-25)
+
+
+### Bug Fixes
+
+* add light theme support to all components ([e73249a](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/e73249a220672e55fe1e634c57b1f1dfc9669280))
+
 ## [2.0.5](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/compare/v2.0.4...v2.0.5) (2025-12-16)
 
 
