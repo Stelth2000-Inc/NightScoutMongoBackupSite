@@ -203,7 +203,7 @@ describe("PM2Status", () => {
     await waitFor(() => {
       const statusBadge = screen.getByText("online");
       expect(statusBadge).toBeInTheDocument();
-      expect(statusBadge).toHaveClass("bg-emerald-950/40");
+      expect(statusBadge).toHaveClass("bg-emerald-50");
     }, { timeout: TEST_TIMEOUT });
   });
 
@@ -282,5 +282,6 @@ describe("PM2Status", () => {
     }, { timeout: TEST_TIMEOUT });
   });
 });
+
 
 
