@@ -1,3 +1,10 @@
+## [2.0.7](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/compare/v2.0.6...v2.0.7) (2025-12-25)
+
+
+### Bug Fixes
+
+* ensure only one theme option is active at a time ([01dceb2](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/commit/01dceb2e7c47113ac67a8009a76ad1d980fed9a7))
+
 ## [2.0.6](https://github.com/Stelth2000-Inc/NightScoutMongoBackupSite/compare/v2.0.5...v2.0.6) (2025-12-25)
 
 
