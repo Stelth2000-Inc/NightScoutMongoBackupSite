@@ -20,3 +20,7 @@ next-env.d.ts
 *NGINX*
 nginx-combined.conf
 .github/scripts/
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
